@@ -5,10 +5,15 @@ const DOOR_COUNT = 3;
 
 var score = 0;
 var round = 0;
+const SAMPLES = 1000;
 
 var gameBoard;
 var scoreBoard;
 var doors = Array(DOOR_COUNT);
+var gameSamples = [];
+var chosenFirstDoor = false;
+var currentDoorChosen = 0;
+var doorShown = 0;
 
 function startGame() {
   gameBoard = {
@@ -30,7 +35,7 @@ function startGame() {
 
   for (i = 0; i < DOOR_COUNT; i++) {
     doors[i] = new doorComponent(
-      i + 1,
+      i,
       DOOR_WIDTH,
       DOOR_HEIGHT,
       DOOR_COLOR,
@@ -39,79 +44,82 @@ function startGame() {
     );
   }
 
-  updateGameArea(true);
+  createNewGame(true);
 }
 
-function doorComponent(id, width, height, color, x, y) {
-  this.id = id;
-  this.width = width;
-  this.height = height;
-  this.x = x;
-  this.y = y;
-  this.color = color;
-  this.choose = function () {
-    ctx = gameBoard.context;
-    ctx.strokeStyle = "black";
-    ctx.lineWidth = 10;
-    ctx.strokeRect(this.x, this.y + 20, this.width, this.height);
-  };
-  this.unchoose = function () {
-    ctx = gameBoard.context;
-    ctx.strokeStyle = this.color;
-    ctx.lineWidth = 10;
-    ctx.strokeRect(this.x, this.y + 20, this.width, this.height);
-  };
-  this.update = function () {
-    ctx = gameBoard.context;
-    ctx.fillStyle = this.color;
-    ctx.fillRect(this.x, this.y + 20, this.width, this.height);
-    ctx.textAlign = "center";
-    ctx.fillStyle = "black";
-    ctx.font = "16px Verdana";
-    text = "Door " + id;
-    ctx.fillText(text, this.x + this.width / 2, this.y);
-
-    this.unchoose();
-  };
+function getRndInteger(min, max) {
+  return Math.floor(Math.random() * (max + 1 - min)) + min;
 }
 
-function scoreBarComponent(color, x, y) {
-  this.x = x;
-  this.y = y;
-  this.color = color;
-  this.updateScore = function (score, round) {
-    ctx = gameBoard.context;
-    ctx.fillStyle = this.color;
-    ctx.font = "16px Verdana";
-    text = "Score: " + score + " / " + round;
-    ctx.fillText(text, this.x, this.y);
-  };
-}
-
-function updateGameArea(clearScore) {
+function createNewGame(clearScore) {
   if (clearScore) {
     score = 0;
     round = 0;
+    chosenFirstDoor = false;
+    currentDoorChosen = 0;
+    doorShown = 0;
+    gameSamples = [];
+
+    // Generate game for user, so we know we aren't cheating
+    for (i = 0; i < SAMPLES; i++) {
+      let carIndex = getRndInteger(0, 2);
+      gameSamples[i] = carIndex;
+    }
   }
+
   gameBoard.clear();
   scoreBoard.updateScore(score, round);
+
   for (i = 0; i < DOOR_COUNT; i++) {
-    doors[i].update();
+    doors[i].reset(i === gameSamples[round]);
   }
 }
 
 function chooseDoor(num) {
+  // First chose
+  console.log("Choosing door: " + num);
+  console.log("Current door chosen: " + currentDoorChosen);
+
+  var firstChoose = false;
+  if (chosenFirstDoor === false) {
+    currentDoorChosen = num;
+    chosenFirstDoor = true;
+    firstChoose = true;
+  } else {
+    // Picking again
+
+    if (num === doorShown) return;
+  }
+
   for (i = 0; i < DOOR_COUNT; i++) {
-    if (num == i) {
-      doors[i].choose();
-    } else {
-      doors[i].unchoose();
+    doors[i].select(num === i);
+  }
+
+  // choose another doors at random that isn't success to open for user
+  if (firstChoose) {
+    let chooses = [];
+    for (i = 0; i < DOOR_COUNT; i++) {
+      if (i === currentDoorChosen) continue;
+      if (i === gameSamples[round]) continue;
+      chooses.push(i);
     }
+
+    let choiceIndex = getRndInteger(0, chooses.length - 1);
+    doorShown = chooses[choiceIndex];
+
+    console.log("Showing door: " + doorShown);
+    setTimeout(function () {
+      doors[doorShown].open(true);
+    }, 500);
+    //  doors[doorShown].open(true);
   }
 }
 
 function restart() {
-  updateGameArea(true);
+  //var r = confirm("Do you want to restart a new game?");
+  //if (r !== true) return;
+
+  createNewGame(true);
 }
 
 function door1() {
@@ -126,7 +134,13 @@ function door3() {
   chooseDoor(2);
 }
 
+function finish() {
+  for (i = 0; i < DOOR_COUNT; i++) {
+    doors[i].open();
+  }
+}
+
 function nextRound() {
   round++;
-  updateGameArea(false);
+  createNewGame(false);
 }

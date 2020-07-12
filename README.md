@@ -1,6 +1,4 @@
-# js-monty-hall-problem
-
-Monty hall problem game
+# Monty hall problem game
 
 ## Demo
 
