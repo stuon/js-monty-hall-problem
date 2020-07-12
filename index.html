@@ -1,28 +1,26 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="styles.css" />
+    <title>Monty Hall Problem</title>
   </head>
   <body>
-    <h1>Monthy Hall Problem</h1>
-    <canvas
-      id="canvas"
-      width="800"
-      height="400"
-      style="background-color: #333;"
-    >
-    </canvas>
+    <h1>Monty Hall Problem</h1>
+    <p>Monty Hall Problem - https://en.wikipedia.org/wiki/Monty_Hall_problem</p>
+    <game id="game"></game>
     <script src="monty-hall-problem.js"></script>
     <script type="text/javascript">
-      drawGame();
-      //drawClock();
-      //setInterval(drawClock, 1000);
+      window.addEventListener("load", function () {
+        startGame();
+      });
     </script>
     <div class="btn-group">
-      <button onclick="reset()">Reset</button>
-      <button onclick="openDoor1()">Door 1</button>
-      <button onclick="openDoor2()">Door 2</button>
-      <button onclick="openDoor3()">Door 3</button>
+      <button id="restart" onclick="restart()">Restart</button>
+      <button id="door1" onclick="door1()">Door 1</button>
+      <button id="door2" onclick="door2()">Door 2</button>
+      <button id="door3" onclick="door3()">Door 3</button>
+      <button id="nextRound" onclick="nextRound()">Next Round</button>
     </div>
   </body>
 </html>

@@ -1,9 +1,13 @@
+canvas {
+  border: 1px solid #d3d3d3;
+  background-color: #f1f1f1;
+}
 .btn-group button {
   background-color: #4caf50; /* Green background */
   border: 1px solid green; /* Green border */
   color: white; /* White text */
-  padding: 24px 24px 24px 24px; /* Some padding */
-  margin: 24px 24px 24px 24px; /* Some padding */
+  padding: 10px 24px; /* Some padding */
+  margin: 10px; /* Some padding */
   cursor: pointer; /* Pointer/hand icon */
   float: left; /* Float the buttons side by side */
 }
