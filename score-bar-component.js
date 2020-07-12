@@ -7,14 +7,7 @@ function scoreBarComponent(color, x, y) {
     ctx.fillStyle = this.color;
     ctx.textAlign = "left";
     ctx.font = "16px Verdana";
-    text =
-      "Score: " +
-      score +
-      " / " +
-      round +
-      " (Answer=" +
-      gameSamples[round] +
-      ")";
+    text = "Score: " + score + " / " + round;
     ctx.fillText(text, this.x, this.y);
   };
 }

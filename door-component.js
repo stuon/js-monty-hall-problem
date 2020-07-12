@@ -39,7 +39,7 @@ function doorComponent(id, width, height, color, x, y) {
       if (this.hasCar) {
         ctx.fillStyle = "yellow"; // car
       } else {
-        ctx.fillStyle = "red"; // goat
+        ctx.fillStyle = "orange"; // goat
       }
     } else {
       ctx.fillStyle = this.color;
@@ -55,5 +55,17 @@ function doorComponent(id, width, height, color, x, y) {
 
     ctx.lineWidth = 10;
     ctx.strokeRect(this.x, this.y + 20, this.width, this.height);
+
+    if (this.opened) {
+      ctx.textAlign = "center";
+      ctx.fillStyle = "black";
+      ctx.font = "16px Verdana";
+      const doorContent = this.hasCar ? "Car" : "Goat";
+      ctx.fillText(
+        doorContent,
+        this.x + this.width / 2,
+        this.y + this.height / 2
+      );
+    }
   };
 }
