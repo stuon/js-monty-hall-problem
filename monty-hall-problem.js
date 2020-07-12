@@ -14,6 +14,7 @@ var gameSamples = [];
 var chosenFirstDoor = false;
 var currentDoorChosen = 0;
 var doorShown = 0;
+var roundFinished = false;
 
 function startGame() {
   gameBoard = {
@@ -55,9 +56,6 @@ function createNewGame(clearScore) {
   if (clearScore) {
     score = 0;
     round = 0;
-    chosenFirstDoor = false;
-    currentDoorChosen = 0;
-    doorShown = 0;
     gameSamples = [];
 
     // Generate game for user, so we know we aren't cheating
@@ -66,6 +64,11 @@ function createNewGame(clearScore) {
       gameSamples[i] = carIndex;
     }
   }
+
+  doorShown = 0;
+  currentDoorChosen = 0;
+  chosenFirstDoor = false;
+  roundFinished = false;
 
   gameBoard.clear();
   scoreBoard.updateScore(score, round);
@@ -76,9 +79,17 @@ function createNewGame(clearScore) {
 }
 
 function chooseDoor(num) {
+  console.log("Button Click" + num);
+
+  if (roundFinished) {
+    alert(
+      "Can't selected once you've finished. Please select 'next round' or 'restart'"
+    );
+    return;
+  }
   // First chose
+  console.log("Previous door chosen: " + currentDoorChosen);
   console.log("Choosing door: " + num);
-  console.log("Current door chosen: " + currentDoorChosen);
 
   var firstChoose = false;
   if (chosenFirstDoor === false) {
@@ -88,7 +99,11 @@ function chooseDoor(num) {
   } else {
     // Picking again
 
-    if (num === doorShown) return;
+    if (num === doorShown) {
+      console.log("Can't choose shown door: " + doorShown);
+      return;
+    }
+    currentDoorChosen = num;
   }
 
   for (i = 0; i < DOOR_COUNT; i++) {
@@ -116,8 +131,8 @@ function chooseDoor(num) {
 }
 
 function restart() {
-  //var r = confirm("Do you want to restart a new game?");
-  //if (r !== true) return;
+  var r = confirm("Do you want to restart a new game?");
+  if (r !== true) return;
 
   createNewGame(true);
 }
@@ -138,9 +153,14 @@ function finish() {
   for (i = 0; i < DOOR_COUNT; i++) {
     doors[i].open();
   }
+
+  roundFinished = true;
 }
 
 function nextRound() {
+  if (chosenFirstDoor && currentDoorChosen == gameSamples[round]) {
+    score++;
+  }
   round++;
   createNewGame(false);
 }
