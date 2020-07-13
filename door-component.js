@@ -32,7 +32,7 @@ function doorComponent(id, width, height, color, x, y) {
     ctx.textAlign = "center";
     ctx.fillStyle = "black";
     ctx.font = "16px Verdana";
-    const doorTitle = "Door " + id;
+    const doorTitle = "Door " + (id + 1); // One offset for display
     ctx.fillText(doorTitle, this.x + this.width / 2, this.y);
 
     if (this.opened) {
