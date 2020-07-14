@@ -1,3 +1,5 @@
+"use strict";
+
 function doorComponent(id, width, height, color, x, y) {
   this.id = id;
   this.width = width;

@@ -1,3 +1,5 @@
+"use strict";
+
 const DOOR_WIDTH = 120;
 const DOOR_HEIGHT = 160;
 const DOOR_COLOR = "green";
@@ -5,7 +7,7 @@ const DOOR_COUNT = 3;
 
 var score = 0;
 var round = 0;
-const SAMPLES = 1000;
+const SAMPLES = 10000;
 
 var gameBoard;
 var scoreBoard;
@@ -15,6 +17,7 @@ var chosenFirstDoor = false;
 var currentDoorChosen = 0;
 var doorShown = 0;
 var roundFinished = false;
+var autoRun = false;
 
 function startGame() {
   gameBoard = {
@@ -32,9 +35,9 @@ function startGame() {
   };
 
   gameBoard.start();
-  scoreBoard = new scoreBarComponent("black", 40, 40);
+  scoreBoard = new scoreBarComponent("black", 40, 40, 640, 80);
 
-  for (i = 0; i < DOOR_COUNT; i++) {
+  for (let i = 0; i < DOOR_COUNT; i++) {
     doors[i] = new doorComponent(
       i,
       DOOR_WIDTH,
@@ -57,9 +60,10 @@ function createNewGame(clearScore) {
     score = 0;
     round = 0;
     gameSamples = [];
+    autoRun = false;
 
     // Generate game for user, so we know we aren't cheating
-    for (i = 0; i < SAMPLES; i++) {
+    for (let i = 0; i < SAMPLES; i++) {
       let carIndex = getRndInteger(0, 2);
       gameSamples[i] = carIndex;
     }
@@ -73,23 +77,23 @@ function createNewGame(clearScore) {
   gameBoard.clear();
   scoreBoard.updateScore(score, round);
 
-  for (i = 0; i < DOOR_COUNT; i++) {
+  for (let i = 0; i < DOOR_COUNT; i++) {
     doors[i].reset(i === gameSamples[round]);
   }
 }
 
 function chooseDoor(num) {
-  console.log("Button Click" + num);
+  if (round >= SAMPLES) {
+    alert("You've reach the maximum number of games");
+    return;
+  }
 
   if (roundFinished) {
     alert(
-      "Can't selected once you've finished. Please select 'next round' or 'restart'"
+      "You cannot select a new door once you've finished. Please select 'next round' or 'restart'"
     );
     return;
   }
-  // First chose
-  console.log("Previous door chosen: " + currentDoorChosen);
-  console.log("Choosing door: " + num);
 
   var firstChoose = false;
   if (chosenFirstDoor === false) {
@@ -100,33 +104,33 @@ function chooseDoor(num) {
     // Picking again
 
     if (num === doorShown) {
-      console.log("Can't choose shown door: " + doorShown);
       return;
     }
     currentDoorChosen = num;
   }
 
-  for (i = 0; i < DOOR_COUNT; i++) {
+  for (let i = 0; i < DOOR_COUNT; i++) {
     doors[i].select(num === i);
   }
 
-  // choose another doors at random that isn't success to open for user
-  if (firstChoose) {
-    let chooses = [];
-    for (i = 0; i < DOOR_COUNT; i++) {
-      if (i === currentDoorChosen) continue;
-      if (i === gameSamples[round]) continue;
-      chooses.push(i);
+  if (!autoRun) {
+    // choose another doors at random that isn't success to open for user
+    if (firstChoose) {
+      let chooses = [];
+      for (let i = 0; i < DOOR_COUNT; i++) {
+        if (i === currentDoorChosen) continue;
+        if (i === gameSamples[round]) continue;
+        chooses.push(i);
+      }
+
+      let choiceIndex = getRndInteger(0, chooses.length - 1);
+      doorShown = chooses[choiceIndex];
+
+      setTimeout(function () {
+        doors[doorShown].open(true);
+      }, 500);
+      //  doors[doorShown].open(true);
     }
-
-    let choiceIndex = getRndInteger(0, chooses.length - 1);
-    doorShown = chooses[choiceIndex];
-
-    console.log("Showing door: " + doorShown);
-    setTimeout(function () {
-      doors[doorShown].open(true);
-    }, 500);
-    //  doors[doorShown].open(true);
   }
 }
 
@@ -150,17 +154,56 @@ function door3() {
 }
 
 function finish() {
-  for (i = 0; i < DOOR_COUNT; i++) {
+  if (roundFinished) return;
+  for (let i = 0; i < DOOR_COUNT; i++) {
     doors[i].open();
   }
 
-  roundFinished = true;
-}
-
-function nextRound() {
   if (chosenFirstDoor && currentDoorChosen == gameSamples[round]) {
     score++;
   }
   round++;
+
+  scoreBoard.updateScore(score, round);
+  roundFinished = true;
+}
+
+function nextRound() {
+  finish();
   createNewGame(false);
+}
+
+function runSimulation(runs) {
+  if (chosenFirstDoor) {
+    nextRound();
+  }
+
+  repeatXI(playGameAutomatically, 20 /* wait time */, runs);
+}
+
+function playGameAutomatically() {
+  createNewGame(false);
+  autoRun = true;
+  var choice = getRndInteger(0, 2);
+  chooseDoor(choice);
+  finish();
+
+  autoRun = false;
+}
+
+function repeatXI(callback, interval, repeats, immediate) {
+  var timer, trigger;
+  trigger = function () {
+    callback();
+    --repeats || clearInterval(timer);
+  };
+
+  interval = interval <= 0 ? 1000 : interval; // default: 1000ms
+  repeats = parseInt(repeats, 10) || 0; // default: repeat forever
+  timer = setInterval(trigger, interval);
+
+  if (!!immediate) {
+    // Coerce boolean
+    trigger();
+  }
 }
