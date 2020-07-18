@@ -7,7 +7,6 @@
   </head>
   <body>
     <h1>Monty Hall Problem</h1>
-    <p>Monty Hall Problem - https://en.wikipedia.org/wiki/Monty_Hall_problem</p>
     <game id="game"></game>
     <script src="js/app.js"></script>
     <script src="js/door-component.js"></script>
@@ -19,6 +18,20 @@
         startGame();
       });
     </script>
+    <h2>Play Game</h2>
+    <p>
+      Welcome to the Monty Hall Problem game. Behind one of the doors is a car.
+      Behind the other two are goats.
+    </p>
+    <p>
+      1. What are the odds of picking the door that has the car?
+    </p>
+    <p>
+      2. After your first selection, you will be shown one of the other door
+      that has a goat, and given the choice to switch to the remaining door.
+      What are the odds of picking the door that has the car if you always
+      switch?
+    </p>
     <div class="btn-group">
       <button id="restart" onclick="restart()">Restart</button>
       <button id="door1" onclick="door1()">Door 1</button>
@@ -27,32 +40,34 @@
       <button id="finish" onclick="finish()">Finish & Show Answer</button>
       <button id="nextRound" onclick="nextRound()">Next Round</button>
     </div>
+    <h2>Keep Choice Simulation</h2>
     <div class="btn-group">
       <button id="runSimulation1" onclick="runSimulation(1)">
-        Play game automatically
+        Play 1 game automatically
       </button>
       <button id="runSimulation100" onclick="runSimulation(100)">
-        Run 100 simulations
+        Run 100 times
       </button>
       <button id="runSimulation1000" onclick="runSimulation(1000)">
-        Run 1000 simulations
+        Run 1000 times
       </button>
       <button id="runSimulation3000" onclick="runSimulation(3000)">
-        Run 3000 simulations
+        Run 3000 times
       </button>
     </div>
+    <h2>Change Choice Simulation</h2>
     <div class="btn-group">
       <button id="runSimulation1" onclick="runSimulation(1, true)">
-        Play switch automatically
+        Play 1 game automatically
       </button>
       <button id="runSimulation100" onclick="runSimulation(100, true)">
-        Run 100 switch simulations
+        Run 100 times
       </button>
       <button id="runSimulation1000" onclick="runSimulation(1000, true)">
-        Run 1000 switch simulations
+        Run 1000 times
       </button>
       <button id="runSimulation3000" onclick="runSimulation(3000, true)">
-        Run 3000 switch simulations
+        Run 3000 times
       </button>
     </div>
   </body>
