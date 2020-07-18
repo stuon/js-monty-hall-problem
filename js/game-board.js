@@ -5,7 +5,7 @@ function gameBoard(document) {
 
   this.start = function () {
     this.canvas.width = 640;
-    this.canvas.height = 480;
+    this.canvas.height = 360;
     this.context = this.canvas.getContext("2d");
     var game = document.getElementById("game");
     game.insertBefore(this.canvas, game.childNodes[0]);
