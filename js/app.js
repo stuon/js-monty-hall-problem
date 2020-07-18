@@ -1,52 +1,22 @@
 "use strict";
 
-const DOOR_WIDTH = 120;
-const DOOR_HEIGHT = 160;
-const DOOR_COLOR = "green";
-const DOOR_COUNT = 3;
-
-var score = 0;
-var round = 0;
-const SAMPLES = 10000;
+const DOOR_WIDTH = 120; // in pixel
+const DOOR_HEIGHT = 160; // in pixel
+const DOOR_COLOR = "green"; // default color of door
+const DOOR_COUNT = 3; // number of doors
+const SAMPLES = 10000; // number of pre-calculated samples
 
 var gameBoard;
 var scoreBoard;
-var doors = Array(DOOR_COUNT);
-var gameSamples = [];
-var chosenFirstDoor = false;
-var currentDoorChosen = 0;
-var doorShown = 0;
-var roundFinished = false;
-var autoRun = false;
+var gameState;
 
 function startGame() {
-  gameBoard = {
-    canvas: document.createElement("canvas"),
-    start: function () {
-      this.canvas.width = 640;
-      this.canvas.height = 480;
-      this.context = this.canvas.getContext("2d");
-      var game = document.getElementById("game");
-      game.insertBefore(this.canvas, game.childNodes[0]);
-    },
-    clear: function () {
-      this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    },
-  };
-
-  gameBoard.start();
+  gameBoard = new gameBoard(document);
+  gameState = new gameState();
   scoreBoard = new scoreBarComponent("black", 40, 40, 640, 80);
 
-  for (let i = 0; i < DOOR_COUNT; i++) {
-    doors[i] = new doorComponent(
-      i,
-      DOOR_WIDTH,
-      DOOR_HEIGHT,
-      DOOR_COLOR,
-      70 + i * (70 + DOOR_WIDTH),
-      100
-    );
-  }
+  gameBoard.start();
+  gameState.init();
 
   createNewGame(true);
 }
@@ -56,95 +26,80 @@ function getRndInteger(min, max) {
 }
 
 function createNewGame(clearScore) {
-  if (clearScore) {
-    score = 0;
-    round = 0;
-    gameSamples = [];
-    autoRun = false;
-
-    // Generate game for user, so we know we aren't cheating
-    for (let i = 0; i < SAMPLES; i++) {
-      let carIndex = getRndInteger(0, 2);
-      gameSamples[i] = carIndex;
-    }
-  }
-
-  doorShown = 0;
-  currentDoorChosen = 0;
-  chosenFirstDoor = false;
-  roundFinished = false;
-
+  gameState.clear(clearScore);
   gameBoard.clear();
-  scoreBoard.updateScore(score, round);
 
   for (let i = 0; i < DOOR_COUNT; i++) {
-    doors[i].reset(i === gameSamples[round]);
+    gameState.doors[i].reset(i === gameState.gameSamples[gameState.round]);
   }
+
+  scoreBoard.updateScore(gameState.score, gameState.round);
 }
 
 function chooseDoor(num, switchdoor) {
-  if (round >= SAMPLES) {
+  if (gameState.round >= SAMPLES) {
     alert("You've reach the maximum number of games");
     return;
   }
 
-  if (roundFinished) {
+  if (gameState.roundFinished) {
     alert(
       "You cannot select a new door once you've finished. Please select 'next round' or 'restart'"
     );
     return;
   }
 
-  var firstChoose = false;
-  if (chosenFirstDoor === false) {
-    currentDoorChosen = num;
-    chosenFirstDoor = true;
+  let firstChoose = false;
+  if (gameState.chosenFirstDoor === false) {
+    gameState.currentDoorChosen = num;
+    gameState.chosenFirstDoor = true;
     firstChoose = true;
   } else {
     // Picking again
 
-    if (num === doorShown) {
+    if (num === gameState.doorShown) {
+      alert("You cannot select the shown door. Please select another");
       return;
     }
-    currentDoorChosen = num;
+    gameState.currentDoorChosen = num;
   }
 
   for (let i = 0; i < DOOR_COUNT; i++) {
-    doors[i].select(num === i);
+    gameState.doors[i].select(num === i);
   }
 
-  if (!autoRun || switchdoor) {
+  if (!gameState.autoRun || switchdoor) {
     // choose another doors at random that isn't success to open for user
     if (firstChoose) {
       let chooses = [];
       for (let i = 0; i < DOOR_COUNT; i++) {
-        if (i === currentDoorChosen) continue;
-        if (i === gameSamples[round]) continue;
+        if (i === gameState.currentDoorChosen) continue;
+        if (i === gameState.gameSamples[gameState.round]) continue;
         chooses.push(i);
       }
 
       const choiceIndex = getRndInteger(0, chooses.length - 1);
-      doorShown = chooses[choiceIndex];
+      gameState.doorShown = chooses[choiceIndex];
 
-      if (autoRun) {
-        doors[doorShown].open(true);
+      if (gameState.autoRun) {
+        gameState.doors[gameState.doorShown].open(true);
       } else {
         setTimeout(function () {
-          doors[doorShown].open(true);
+          gameState.doors[gameState.doorShown].open(true);
         }, 500); // show small delay to let user get feedback
       }
 
       if (switchdoor) {
         for (let i = 0; i < DOOR_COUNT; i++) {
-          doors[i].select(false);
+          gameState.doors[i].select(false);
         }
 
         for (let i = 0; i < DOOR_COUNT; i++) {
-          if (i === currentDoorChosen) continue;
-          if (i === doorShown) continue;
+          if (i === gameState.currentDoorChosen) continue;
+          if (i === gameState.doorShown) continue;
 
-          currentDoorChosen = i;
-          doors[i].select(true);
+          gameState.currentDoorChosen = i;
+          gameState.doors[i].select(true);
           break;
         }
       }
@@ -172,22 +127,25 @@ function door3() {
 }
 
 function finish() {
-  if (roundFinished) return;
+  if (gameState.roundFinished) return;
   for (let i = 0; i < DOOR_COUNT; i++) {
-    doors[i].open();
+    gameState.doors[i].open();
   }
 
-  if (chosenFirstDoor && currentDoorChosen == gameSamples[round]) {
-    score++;
+  if (
+    gameState.chosenFirstDoor &&
+    gameState.currentDoorChosen == gameState.gameSamples[gameState.round]
+  ) {
+    gameState.score++;
   }
-  round++;
+  gameState.round++;
 
-  scoreBoard.updateScore(score, round);
-  roundFinished = true;
+  scoreBoard.updateScore(gameState.score, gameState.round);
+  gameState.roundFinished = true;
 }
 
 function nextRound() {
-  if (!chosenFirstDoor && !roundFinished) {
+  if (!gameState.chosenFirstDoor && !gameState.roundFinished) {
     alert("Please choose a door first");
     return;
   }
@@ -196,7 +154,7 @@ function nextRound() {
 }
 
 function runSimulation(runs, switchdoor) {
-  if (chosenFirstDoor) {
+  if (gameState.chosenFirstDoor) {
     nextRound();
   }
 
@@ -209,22 +167,22 @@ function runSimulation(runs, switchdoor) {
 
 function playGameAutomaticallyWithSwitch() {
   createNewGame(false);
-  autoRun = true;
+  gameState.autoRun = true;
   var choice = getRndInteger(0, 2);
   chooseDoor(choice, true);
   finish();
 
-  autoRun = false;
+  gameState.autoRun = false;
 }
 
 function playGameAutomatically() {
   createNewGame(false);
-  autoRun = true;
+  gameState.autoRun = true;
   var choice = getRndInteger(0, 2);
   chooseDoor(choice, false);
   finish();
 
-  autoRun = false;
+  gameState.autoRun = false;
 }
 
 function repeatXI(callback, interval, repeats, immediate) {
