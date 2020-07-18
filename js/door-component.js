@@ -58,16 +58,22 @@ function doorComponent(id, width, height, color, x, y) {
     ctx.lineWidth = 10;
     ctx.strokeRect(this.x, this.y + 20, this.width, this.height);
 
+    ctx.textAlign = "center";
+    let doorContent = "";
     if (this.opened) {
-      ctx.textAlign = "center";
       ctx.fillStyle = "black";
       ctx.font = "16px Verdana";
-      const doorContent = this.hasCar ? "Car" : "Goat";
-      ctx.fillText(
-        doorContent,
-        this.x + this.width / 2,
-        this.y + this.height / 2
-      );
+      doorContent = this.hasCar ? "Car" : "Goat";
+    } else {
+      ctx.fillStyle = "white";
+      ctx.font = "16px Verdana";
+      doorContent = "?";
     }
+
+    ctx.fillText(
+      doorContent,
+      this.x + this.width / 2,
+      this.y + this.height / 2
+    );
   };
 }
