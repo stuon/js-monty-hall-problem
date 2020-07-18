@@ -13,7 +13,7 @@ var gameState;
 function startGame() {
   gameBoard = new gameBoard(document);
   gameState = new gameState();
-  scoreBoard = new scoreBarComponent("black", 40, 40, 640, 80);
+  scoreBoard = new scoreBarComponent("black", 40, 40, 480, 80);
 
   gameBoard.start();
   gameState.init();
