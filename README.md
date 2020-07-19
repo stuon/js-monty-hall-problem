@@ -2,7 +2,7 @@
 
 This repo contains files for Monty Hall Problem.
 
-## Demo
+## Online Demo
 
 https://stuon.github.io/js-monty-hall-problem/
 
@@ -36,23 +36,23 @@ Let’s assume the door looks like below and play through all the possible actio
 
 ### Not switching
 
-| Door 1 | Door 2 | Door 3 | Outcome                              |
-| ------ | ------ | ------ | ------------------------------------ |
-| goat   | goat   | car    | you pick first door, and you lose    |
-| goat   | goat   | car    | you picked second door, and you lose |
-| goat   | goat   | car    | you picked third door and you win    |
+| Door 1 | Door 2 | Door 3 | Strategy    | OutCome |
+| ------ | ------ | ------ | ----------- | ------- |
+| goat   | goat   | car    | Pick Door 1 | Lose    |
+| goat   | goat   | car    | Pick Door 2 | Lose    |
+| goat   | goat   | car    | Pick Door 3 | Win     |
 
 So out of the 3 possibilities, you can only win in 1 of them. So you have a 1 in 3 chance of winning.
 
 ### Switching
 
-| Door 1 | Door 2 | Door 3 | Outcome                                                                                               |
-| ------ | ------ | ------ | ----------------------------------------------------------------------------------------------------- |
-| goat   | goat   | car    | you pick first door. Host will show second door. You switch to third door and win.                    |
-| goat   | goat   | car    | you pick second door. Host will show first door. You switch to third door and win.                    |
-| goat   | goat   | car    | you pick third door. Host will show either first or second. But regardless, you will switch and lose. |
+| Door 1 | Door 2 | Door 3 | Strategy                                                    | Outcome |
+| ------ | ------ | ------ | ----------------------------------------------------------- | ------- |
+| goat   | goat   | car    | Pick door 1. Host shows Door 2. You switch to Door 3        | Win     |
+| goat   | goat   | car    | Pick door 2. Host shows Door 3. You switch to Door 3        | Win     |
+| goat   | goat   | car    | Pick door 3. Host shows Door 1 or 2. Regardless, you switch | Lose    |
 
-In this method, you can win in 2 of the 3 possibilities.
+In this method, you can win in 2 of the possibilities. So you have a 2 in 3 chance of winning.
 
 While the example above assume the door had “[goat][goat] [car]”, you can will get same results if it was “[car][goat] [goat]” or “[goat][car] [goat]”
 
