@@ -54,7 +54,8 @@ So out of the 3 possibilities, you can only win in 1 of them. So you have a 1 in
 
 In this method, you can win in 2 of the possibilities. So you have a 2 in 3 chance of winning.
 
-While the example above assume the door had “[goat][goat] [car]”, you can will get same results if it was “[car][goat] [goat]” or “[goat][car] [goat]”
+While the example above assumes the door started with “goat | goat | car”.
+you can will get same results if it was “car | goat | goat” or “goat | car | goat”.
 
 ## FAQ
 
