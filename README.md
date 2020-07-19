@@ -62,6 +62,6 @@ While the example above assume the door had “[goat][goat] [car]”, you can wi
 
 A: If you are new to github and just want to download the complete package, hit the green button saying "Clone or download", and choose "Download Zip" option, and you're good to go.
 
-### Q1: How do I run the application?
+### Q2: How do I run the application?
 
 A: Once downloaded, just run click on the index.html file to open it up in your favour browser
