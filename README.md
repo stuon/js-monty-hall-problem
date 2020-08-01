@@ -49,7 +49,7 @@ So out of the 3 possibilities, you can only win in 1 of them. So you have a 1 in
 | Door 1 | Door 2 | Door 3 | Strategy                                                    | Outcome |
 | ------ | ------ | ------ | ----------------------------------------------------------- | ------- |
 | goat   | goat   | car    | Pick door 1. Host shows Door 2. You switch to Door 3        | Win     |
-| goat   | goat   | car    | Pick door 2. Host shows Door 3. You switch to Door 3        | Win     |
+| goat   | goat   | car    | Pick door 2. Host shows Door 1. You switch to Door 3        | Win     |
 | goat   | goat   | car    | Pick door 3. Host shows Door 1 or 2. Regardless, you switch | Lose    |
 
 In this method, you can win in 2 of the possibilities. So you have a 2 in 3 chance of winning.
