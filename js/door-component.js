@@ -16,28 +16,29 @@ doorComponent.prototype.reset = function (hasCar) {
   this.hasCar = hasCar;
   this.opened = false;
   this.selected = false;
-  this.update();
+  this.update(true);
 };
 
 doorComponent.prototype.select = function (value) {
   this.selected = value;
-  this.update();
+  this.update(false);
 };
 
 doorComponent.prototype.open = function () {
   this.opened = true;
-  this.update();
+  this.update(false);
 };
 
-doorComponent.prototype.update = function () {
+doorComponent.prototype.update = function (resetTitle) {
   const ctx = gameBoard.context;
 
-  ctx.textAlign = "center";
-  ctx.fillStyle = "black";
-  ctx.font = "16px Verdana";
-  const doorTitle = `Door ${this.id + 1}`; // One offset for display
-  ctx.fillText(doorTitle, this.x + this.width / 2, this.y);
-
+  if (resetTitle) {
+    ctx.textAlign = "center";
+    ctx.fillStyle = "black";
+    ctx.font = "16px Verdana";
+    const doorTitle = `Door ${this.id + 1}`; // One offset for display
+    ctx.fillText(doorTitle, this.x + this.width / 2, this.y);
+  }
   if (this.opened) {
     if (this.hasCar) {
       ctx.fillStyle = "yellow"; // car
