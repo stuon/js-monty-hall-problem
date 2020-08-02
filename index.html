@@ -3,72 +3,153 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+      integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ"
+      crossorigin="anonymous"
+    />
     <title>Monty Hall Problem</title>
   </head>
   <body>
-    <h1>Monty Hall Problem</h1>
-    <game id="game"></game>
-    <script src="js/app.js"></script>
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <h1>Monty Hall Problem</h1>
+          <p>
+            Welcome to the Monty Hall Problem game. Behind one of the doors is a
+            car. Behind the other two are goats.
+          </p>
+          <p>
+            1. What are the odds of picking the door that has the car?
+          </p>
+          <p>
+            2. After your first selection, you will be shown one of the other
+            door that has a goat, and given the choice to switch to the
+            remaining door. If you always swtich, what are the odds of picking
+            the door that has the car?
+          </p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <h3>Board</h3>
+          <canvas id="game"></canvas>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <h3>Play Game</h3>
+          <p>
+            Play the game yourself to test
+          </p>
+
+          <button id="restart" type="button" class="btn btn-warning">
+            Restart
+          </button>
+          <button id="door-1" type="button" class="btn btn-primary">
+            Door 1
+          </button>
+          <button id="door-2" type="button" class="btn btn-primary">
+            Door 2
+          </button>
+          <button id="door-3" type="button" class="btn btn-primary">
+            Door 3
+          </button>
+          <button id="finish" type="button" class="btn btn-success">
+            Show Answer
+          </button>
+          <button id="next-round" type="button" class="btn btn-info">
+            Next Round
+          </button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <h3>Simulation</h3>
+          <p>
+            Test the two methods by running simulations
+          </p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">
+          <label>Selection method</label>
+          <fieldset class="form-group">
+            <div class="form-check">
+              <label class="form-check-label">
+                <input
+                  type="radio"
+                  class="form-check-input"
+                  name="option-simulation-method"
+                  id="option-simulation-method-no-switch"
+                  value="no-switch"
+                  checked
+                />
+                Don't switch
+              </label>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input
+                  type="radio"
+                  class="form-check-input"
+                  name="option-simulation-method"
+                  id="option-simulation-method-switch"
+                  value="switch"
+                />
+                Switch
+              </label>
+            </div>
+          </fieldset>
+        </div>
+        <div class="col-4">
+          <label for="example-number-input" class="col-form-label"
+            >Number of runs</label
+          >
+          <input
+            class="form-control"
+            type="number"
+            value="100"
+            id="simulation-runs"
+          />
+        </div>
+        <div class="col-4">
+          <button id="run-simulation" type="button" class="btn btn-secondary">
+            Run Simulation
+          </button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <small>
+            This site is offered as is to those who visit it. We make no
+            guarantees regarding its services. Just enjoy yourself.</small
+          >
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+      integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
+      integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"
+      integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
+      crossorigin="anonymous"
+    ></script>
     <script src="js/door-component.js"></script>
     <script src="js/game-board.js"></script>
     <script src="js/game-state.js"></script>
     <script src="js/score-bar-component.js"></script>
-    <script type="text/javascript">
-      window.addEventListener("load", function () {
-        startGame();
-      });
-    </script>
-    <h2>Play Game</h2>
-    <p>
-      Welcome to the Monty Hall Problem game. Behind one of the doors is a car.
-      Behind the other two are goats.
-    </p>
-    <p>
-      1. What are the odds of picking the door that has the car?
-    </p>
-    <p>
-      2. After your first selection, you will be shown one of the other door
-      that has a goat, and given the choice to switch to the remaining door.
-      What are the odds of picking the door that has the car if you always
-      switch?
-    </p>
-    <div class="btn-group">
-      <button id="restart" onclick="restart()">Restart</button>
-      <button id="door1" onclick="door1()">Door 1</button>
-      <button id="door2" onclick="door2()">Door 2</button>
-      <button id="door3" onclick="door3()">Door 3</button>
-      <button id="finish" onclick="finish()">Finish & Show Answer</button>
-      <button id="nextRound" onclick="nextRound()">Next Round</button>
-    </div>
-    <h2>Keep Choice Simulation</h2>
-    <div class="btn-group">
-      <button id="runSimulation1" onclick="runSimulation(1)">
-        Play 1 game automatically
-      </button>
-      <button id="runSimulation100" onclick="runSimulation(100)">
-        Run 100 times
-      </button>
-      <button id="runSimulation1000" onclick="runSimulation(1000)">
-        Run 1000 times
-      </button>
-      <button id="runSimulation3000" onclick="runSimulation(3000)">
-        Run 3000 times
-      </button>
-    </div>
-    <h2>Change Choice Simulation</h2>
-    <div class="btn-group">
-      <button id="runSimulation1" onclick="runSimulation(1, true)">
-        Play 1 game automatically
-      </button>
-      <button id="runSimulation100" onclick="runSimulation(100, true)">
-        Run 100 times
-      </button>
-      <button id="runSimulation1000" onclick="runSimulation(1000, true)">
-        Run 1000 times
-      </button>
-      <button id="runSimulation3000" onclick="runSimulation(3000, true)">
-        Run 3000 times
-      </button>
-    </div>
+    <script src="js/app.js"></script>
   </body>
 </html>
