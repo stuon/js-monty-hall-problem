@@ -8,6 +8,8 @@ https://stuon.github.io/js-monty-hall-problem/
 
 ## The Monty Hall Problem
 
+![Alt text](./images/example.PNG)
+
 The Monty Hall problem is a statistical brainteaser and is based on a challenge from an old game show called “let’s make a deal” and named after it’s host, Monty Hall.
 
 In the game show, the contestant is given three doors to choose from. Behind one door is a car, and behind the other two are goats. The host knows in advance what is behind each door. Once the contestant has chosen a door, the host will open one of the remaining doors that has a goat, then ask the contestant if he/she wants to switch to the remaining door.
