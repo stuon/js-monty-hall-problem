@@ -20,7 +20,7 @@ At first glance, it might seem that there is no advantage to switching, as showi
 
 It’s a bit un-intuitive, but you will actually have a higher chance of winning the car if you switch. Not a 1 in 2 chance of winning, but actually 2 out of 3 chance. If you don’t switch, then you will only win 1 in 3 times.
 
-Not convinced? Have a place with the demo at https://stuon.github.io/js-monty-hall-problem/. You can also use the 1000x simulate to compare the two results.
+Not convinced? Have a play with the demo at https://stuon.github.io/js-monty-hall-problem/. You can also use the 1000x simulate to compare the two results.
 
 ## So why is this so?
 
